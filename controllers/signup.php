@@ -1,24 +1,22 @@
 <?php
 require 'core/bootstrap.php';
-require 'header.php';
+session_start();
 if (isset($_POST['submit'])) {
-    $name = $_SESSION['name'] = $_POST['name'];
-    $password = $_POST['password'];
+    $_SESSION['name'] = $_POST['name'];
 
-    $user = $db->selectUser($name);
+    $user = $db->selectUser($_POST['name']);
 
-    if(!$user){
+    if (!$user) {
         $db->storeUser([
-            'name' => $name,
-            'password' => $password,
+            'name' => $_POST['name'],
+            'password' => $_POST['password'],
         ]);
-
-        echo '<div class="success">Sign up successfully ！</div>';
+        $_SESSION['user_id'] = $db->selectUser($_POST['name'])->id;
         echo "
         <script>
-            setTimeout(function(){window.location.href='board';},200);
+            setTimeout(function(){window.location.href='board';},20);
         </script>";
-    }else{
+    } else {
 
         require 'views/index.view.php';
         echo '<div class="warning">The Username has already been used ！</div>';

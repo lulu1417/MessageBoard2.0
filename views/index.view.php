@@ -11,14 +11,14 @@ require 'header.php';
 <div class="flex-center position-ref full-height">
     <div class="top-right home">
         <a href='board'>All Posts</a>
-        <a href="">Login</a>
+        <a href="signin">Sign in</a>
     </div>
     <div class="content">
         <div class="m-b-md">
             <form name="signup" action="signup" method="post">
                 <p>Username : <input type=text name="name"></p>
                 <p>Password : <input type=password name="password"></p>
-                <p><input type="submit" name="submit" value="Sign up">
+                <p><input type="submit" name="submit" value="Sign Up">
                     <style>
                         input {
                             padding: 5px 15px;

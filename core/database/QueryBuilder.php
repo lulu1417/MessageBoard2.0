@@ -3,6 +3,7 @@
 class QueryBuilder
 {
     protected $pdo;
+    protected $user;
 
     public function __construct(PDO $pdo)
     {
@@ -10,11 +11,25 @@ class QueryBuilder
     }
 
     public function selectAll($table)
-    { $statement = $this->pdo->prepare("select * from $table ORDER BY time desc");
+    {
+        $statement = $this->pdo->prepare("select * from $table ORDER BY time desc");
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_CLASS);
 
     }
+
+    public function selectAllWithTableJoin($table, $tableToBeJoined)
+    {
+        $statement = $this->pdo->prepare("SELECT {$tableToBeJoined}.id as {$tableToBeJoined}_id, {$tableToBeJoined}.* , {$table}.*
+FROM {$table}
+    RIGHT JOIN {$tableToBeJoined}
+         ON {$tableToBeJoined}.{$table}_id = {$table}.id 
+   ORDER BY {$tableToBeJoined}.id DESC");
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_CLASS);
+
+    }
+
 
     public function storeUser($user)
     {
@@ -24,14 +39,18 @@ class QueryBuilder
 
     public function selectUser($name)
     {
-        $statement = $this->pdo->prepare("select * from users where name = '{$name}' ORDER BY time desc");
+        $statement = $this->pdo->prepare("select * from users where name = '{$name}' ORDER BY time desc LIMIT 1");
         $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_CLASS);
+        $users = $statement->fetchAll(PDO::FETCH_CLASS);
+        foreach ($users as $user) {
+            $this->user = $user;
+        }
+        return $this->user;
     }
 
-    public function storePost($post)
+    public function storePost($post, $user_id)
     {
-        $statement = $this->pdo->prepare("INSERT INTO posts (name, content, created_at) VALUES ('{$post['name']}', '{$post['content']}', '{$post['created_at']}')");
+        $statement = $this->pdo->prepare("INSERT INTO posts (users_id, subject, content) VALUES ('{$user_id}', '{$post['subject']}','{$post['content']}')");
         $statement->execute();
     }
 
@@ -48,10 +67,10 @@ class QueryBuilder
 
 
         $statement = $this->pdo->prepare("create table posts(
-            id INT(10) AUTO_INCREMENT PRIMARY KEY,
-           user_id INT(10) NOT NULL ,
+           id INT(10) AUTO_INCREMENT PRIMARY KEY,
+           users_id INT(10) NOT NULL ,
            subject VARCHAR (20) NOT NULL ,
-            content VARCHAR(500) NOT NULL,
+           content VARCHAR(500) NOT NULL,
            time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );");
         echo $statement->execute();
@@ -59,10 +78,8 @@ class QueryBuilder
 
         $statement = $this->pdo->prepare("create table comments(
             id INT(10) AUTO_INCREMENT PRIMARY KEY,
-            post_id INT NOT NULL,
-            FOREIGN KEY (post_id) REFERENCES posts(id),
-            user_id INT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id),
+            posts_id INT NOT NULL,
+            users_id INT NOT NULL,
             content VARCHAR(300) NOT NULL,
              time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );");
@@ -71,10 +88,8 @@ class QueryBuilder
 
         $statement = $this->pdo->prepare("create table likes(
             id INT(10) AUTO_INCREMENT PRIMARY KEY,
-            post_id INT NOT NULL,
-            FOREIGN KEY (post_id) REFERENCES posts(id),
-            user_id INT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id),
+            posts_id INT NOT NULL,
+            users_id INT NOT NULL,
             time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );");
         echo $statement->execute();
@@ -82,10 +97,8 @@ class QueryBuilder
 
         $statement = $this->pdo->prepare("create table replies(
             id INT(10) AUTO_INCREMENT PRIMARY KEY,
-            comment_id INT NOT NULL,
-            FOREIGN KEY (comment_id) REFERENCES comments(id),
-            user_id INT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id),
+            comments_id INT NOT NULL,
+            users_id INT NOT NULL,
             content VARCHAR(255) NOT NULL,
             time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );");
@@ -94,4 +107,5 @@ class QueryBuilder
     }
 
 }
+
 ?>
