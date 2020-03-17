@@ -1,6 +1,6 @@
 <?php
 $router->define([
-    '' => 'controllers/index.php',
+    '' => 'controllers/index.php', //signup
     'board' => 'controllers/board.php',
     'storePost' => 'controllers/storePost.php',
     'storeComment' => 'controllers/storeComment.php',

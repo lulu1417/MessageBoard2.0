@@ -1,3 +1,6 @@
+<?php
+require 'header.php';
+?>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -7,8 +10,8 @@
 <body>
 <div class="flex-center position-ref full-height">
     <div class="top-right home">
-        <a href='view.php'>All Posts</a>
-        <a href="login.php">Login</a>
+        <a href='board'>All Posts</a>
+        <a href="">Login</a>
     </div>
     <div class="content">
         <div class="m-b-md">
@@ -30,7 +33,7 @@
                     <style>
                         input {
                             padding: 5px 15px;
-                            background: #FFCCCC;
+                            background: lavenderblush;
                             border: 0 none;
                             cursor: pointer;
                             -webkit-border-radius: 5px;
