@@ -12,5 +12,6 @@ $router->define([
     'storeReply' => 'controllers/storeReply.php',
     'showReplies' => 'controllers/showReplies.php',
     'storeLike' => 'controllers/storeLike.php',
+    'dislike' => 'controllers/dislike.php',
     'showLikes' => 'controllers/showLikes.php',
 ]);
