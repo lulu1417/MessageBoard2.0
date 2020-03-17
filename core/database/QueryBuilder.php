@@ -16,6 +16,25 @@ class QueryBuilder
 
     }
 
+    public function storeUser($user)
+    {
+        $statement = $this->pdo->prepare("INSERT INTO users (name, password) VALUES ('{$user['name']}', '{$user['password']}')");
+        $statement->execute();
+    }
+
+    public function selectUser($name)
+    {
+        $statement = $this->pdo->prepare("select * from users where name = '{$name}' ORDER BY time desc");
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_CLASS);
+    }
+
+    public function storePost($post)
+    {
+        $statement = $this->pdo->prepare("INSERT INTO posts (name, content, created_at) VALUES ('{$post['name']}', '{$post['content']}', '{$post['created_at']}')");
+        $statement->execute();
+    }
+
     public function createStatement()
     {
 

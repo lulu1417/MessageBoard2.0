@@ -15,7 +15,7 @@ require 'header.php';
     </div>
     <div class="content">
         <div class="m-b-md">
-            <form name="signup" action="index.php" method="post">
+            <form name="signup" action="signup" method="post">
                 <p>Username : <input type=text name="name"></p>
                 <p>Password : <input type=password name="password"></p>
                 <p><input type="submit" name="submit" value="Sign up">
@@ -33,7 +33,7 @@ require 'header.php';
                     <style>
                         input {
                             padding: 5px 15px;
-                            background: lavenderblush;
+                            background: #FFCCCC;
                             border: 0 none;
                             cursor: pointer;
                             -webkit-border-radius: 5px;
